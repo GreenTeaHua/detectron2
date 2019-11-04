@@ -22,6 +22,7 @@ python demo/demo.py --config-file configs/COCO-InstanceSegmentation/mask_rcnn_R_
   --input input1.jpg input2.jpg \
   --opts MODEL.WEIGHTS detectron2://COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x/137849600/model_final_f10217.pkl
 ```
+点击“空格”显示下一张。
 The configs are made for training, therefore we need to specify `MODEL.WEIGHTS` to a model from model zoo for evaluation.
 This command will run the inference and show visualizations in an OpenCV window.
 
@@ -30,7 +31,18 @@ This command will run the inference and show visualizations in an OpenCV window.
 * To run __on cpu__, add `MODEL.DEVICE cpu` after `--opts`.
 * To save outputs to a directory (for images) or a file (for webcam or video), use `--output`.
 
-
+--
+python demo/demo.py  \
+    --config-file configs/COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml \
+    --input input2.jpg --output outputs/ \
+    --opts MODEL.WEIGHTS models/model_final_b275ba.pkl
+----------------------
+官方：会下载权重文件到 C:\Users\Q\.torch\fvcore_cache\detectron2\COCO-Detection\faster_rcnn_R_50_FPN_1x\137257794\model_final_b275ba.pkl
+python demo/demo.py  \
+    --config-file configs/COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml \
+    --input input2.jpg --output outputs/ \
+    --opts MODEL.WEIGHTS detectron2://COCO-Detection/faster_rcnn_R_50_FPN_1x/137257794/model_final_b275ba.pkl  
+----
 ### Train a Standard Model
 
 We provide a script in "tools/train_net.py", that is made to train
