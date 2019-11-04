@@ -22,8 +22,40 @@ to see more demos and learn about detectron2.
 
 ## Installation
 
-See [INSTALL.md](INSTALL.md).
+See [INSTALL.md](INSTALL.md).  
+------------------------------------------------------------------
+### for win10  
+0. cuda10.1+ cudann +pytorch1.3+vs2019toolkit  
+test:
+python -c "import torch; from torch.utils.cpp_extension import CUDA_HOME; print(torch.cuda.is_available(), CUDA_HOME)"
+-----
+1. git clone https://github.com/facebookresearch/detectron2.git  
+2. d:/CBNet/detectron2  
+3. 修改 1：  
+    C:\Miniconda3\envs\py36}\Lib\site-packages\torch\include\torch\csrc\jit\argument_spec.h(190)  
+    static constexpr size_t DEPTH_LIMIT = 128;  
+      change to -->  
+    static const size_t DEPTH_LIMIT = 128;  
+    修改2：  
+    C:\Miniconda3\envs\py36}\Lib\site-packages\torch\include\pybind11\cast.h(1449)  
+    explicit operator type&() { return *(this->value); }  
+      change to -->  
+    explicit operator type&() { return *((type*)this->value); }  
+4. detectron2/layers/csrc/ROIAlign/ROIAlign_cuda.cu  line337  
+   dim3 grid(std::min(((int)output_size + 512 -1) / 512, 4096));   //网上  
+  //dim3 grid(std::min(at::cuda::ATenCeilDiv(output_size, 512L), 4096L));  原版  
+   dim3 grid(std::min(at::cuda::ATenCeilDiv((long)output_size, 512L),   4096L));//https://github.com/conansherry/detectron2/blob/master/detectron2/layers/csrc/ROIAlign/ROIAlign_cuda.cu  
+   dim3 grid(std::min(at::cuda::ATenCeilDiv((long)grad.numel(), 512L), 4096L));// line 393  
 
+   D:/CBNet/detectron2/detectron2/layers/csrc/ROIAlignRotated/ROIAlignRotated_cuda.cu(351):  
+   dim3 grid(std::min(at::cuda::ATenCeilDiv((long)output_size, 512L), 4096L));  
+   D:/CBNet/detectron2/detectron2/layers/csrc/ROIAlignRotated/ROIAlignRotated_cuda.cu(407):  
+   dim3 grid(std::min(at::cuda::ATenCeilDiv((long)grad.numel(), 512L), 4096L));  
+5. 开启 vs2019 x64 命令行。  
+
+6. python setup.py build develop  
+7. test    
+--------------------------------------------------------------------------------------------------------  
 ## Quick Start
 
 See [GETTING_STARTED.md](GETTING_STARTED.md),
