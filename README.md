@@ -54,7 +54,8 @@ python -c "import torch; from torch.utils.cpp_extension import CUDA_HOME; print(
 5. 开启 vs2019 x64 命令行。  
 
 6. python setup.py build develop  
-7. test    
+7. test   （权重最好提前下载）  
+python demo/demo.py --config-file configs/COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml --input input2.jpg --output outputs/1 --opts MODEL.WEIGHTS models/137849458/model_final_280758.pkl  
 --------------------------------------------------------------------------------------------------------  
 ## Quick Start
 
